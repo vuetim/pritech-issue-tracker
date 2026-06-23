@@ -70,13 +70,22 @@
         </div>
     </div>
 
-    <section>
-        <div class="mb-4">
+  <section>
+    <div class="mb-4 flex items-center justify-between gap-4">
+        <div>
             <h2 class="text-xl font-bold text-slate-900">Project issues</h2>
             <p class="mt-1 text-sm text-slate-600">
                 Issues currently associated with this project.
             </p>
         </div>
+
+        <a
+            href="{{ route('issues.create', ['project_id' => $project->id]) }}"
+            class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+            Create issue
+        </a>
+    </div>
 
         @if ($issues->isEmpty())
             <div class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center">
@@ -88,9 +97,12 @@
                     <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                         <div class="flex flex-wrap items-start justify-between gap-4">
                             <div>
-                                <h3 class="font-semibold text-slate-900">
-                                    {{ $issue->title }}
-                                </h3>
+                              <a
+    href="{{ route('issues.show', $issue) }}"
+    class="font-semibold text-blue-600 hover:text-blue-800"
+>
+    {{ $issue->title }}
+</a>
 
                                 <p class="mt-1 text-sm text-slate-600">
                                     {{ str($issue->description)->limit(140) }}
