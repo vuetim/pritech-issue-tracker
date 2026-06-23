@@ -74,7 +74,15 @@ class IssueController extends Controller
         $issue->load(['project', 'tags']);
         $issue->loadCount('comments');
 
-        return view('issues.show', compact('issue'));
+        $availableTags = Tag::query()
+            ->whereDoesntHave(
+                'issues',
+                fn ($query) => $query->whereKey($issue->id)
+            )
+            ->orderBy('name')
+            ->get();
+
+        return view('issues.show', compact('issue', 'availableTags'));
     }
 
     /**

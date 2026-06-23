@@ -69,26 +69,87 @@
                 </div>
             </section>
 
-            <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-900">Tags</h2>
-                        <p class="mt-1 text-sm text-slate-600">
-                            Labels currently attached to this issue.
-                        </p>
-                    </div>
-                </div>
+        <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div>
+        <h2 class="text-lg font-bold text-slate-900">Tags</h2>
+        <p class="mt-1 text-sm text-slate-600">
+            Attach or remove tags without reloading the page.
+        </p>
+    </div>
 
-                <div id="issue-tags" class="mt-4 flex flex-wrap gap-2">
-                    @forelse ($issue->tags as $tag)
-                        <span class="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700">
-                            {{ $tag->name }}
-                        </span>
-                    @empty
-                        <span class="text-sm text-slate-500">No tags attached.</span>
-                    @endforelse
-                </div>
-            </section>
+    <div
+        id="tag-feedback"
+        role="status"
+        class="mt-4 hidden rounded-lg px-4 py-3 text-sm"
+    ></div>
+
+    <form
+        id="attach-tag-form"
+        data-url="{{ route('issues.tags.store', $issue) }}"
+        data-detach-template="{{ route('issues.tags.destroy', [$issue, '__TAG__']) }}"
+        class="mt-5 flex flex-col gap-3 sm:flex-row"
+    >
+        <select
+            id="tag-select"
+            name="tag_id"
+            class="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2"
+        >
+            <option value="">Select a tag</option>
+
+            @foreach ($availableTags as $tag)
+                <option value="{{ $tag->id }}">
+                    {{ $tag->name }}
+                </option>
+            @endforeach
+        </select>
+
+        <button
+            type="submit"
+            class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+            Attach tag
+        </button>
+    </form>
+
+    <p id="tag-error" class="mt-2 hidden text-sm text-red-600"></p>
+
+    <div id="issue-tags" class="mt-5 flex flex-wrap gap-2">
+        @foreach ($issue->tags as $tag)
+            <span
+                data-tag-item
+                data-tag-id="{{ $tag->id }}"
+                data-tag-name="{{ $tag->name }}"
+               class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700"
+            >
+             <span
+    class="h-2.5 w-2.5 rounded-full"
+    @style([
+        'background-color: ' . ($tag->color ?? '#cbd5e1'),
+    ])
+></span>
+
+                <span>{{ $tag->name }}</span>
+
+                <button
+                    type="button"
+                    data-detach-tag
+                    data-url="{{ route('issues.tags.destroy', [$issue, $tag]) }}"
+                    class="font-bold text-slate-400 hover:text-red-600"
+                    aria-label="Detach {{ $tag->name }}"
+                >
+                    ×
+                </button>
+            </span>
+        @endforeach
+    </div>
+
+    <p
+        id="empty-tags-message"
+        class="mt-4 text-sm text-slate-500 {{ $issue->tags->isNotEmpty() ? 'hidden' : '' }}"
+    >
+        No tags attached.
+    </p>
+</section>
 
             <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                 <h2 class="text-lg font-bold text-slate-900">
