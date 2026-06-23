@@ -54,6 +54,18 @@ class Issue extends Model
     {
         return $query
             ->when(
+                $filters['search'] ?? null,
+                function (Builder $query, string $search): void {
+                    $query->where(
+                        function (Builder $query) use ($search): void {
+                            $query
+                                ->where('title', 'like', "%{$search}%")
+                                ->orWhere('description', 'like', "%{$search}%");
+                        }
+                    );
+                }
+            )
+            ->when(
                 $filters['status'] ?? null,
                 fn (Builder $query, string $status) => $query->where('status', $status)
             )
