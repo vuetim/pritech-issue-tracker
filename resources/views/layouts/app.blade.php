@@ -33,6 +33,12 @@
 >
     Issues
 </a>
+<a
+    href="{{ route('tags.index') }}"
+    class="text-sm font-medium text-slate-600 hover:text-slate-900"
+>
+    Tags
+</a>
                     <a
                         href="{{ route('projects.create') }}"
                         class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"

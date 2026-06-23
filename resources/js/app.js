@@ -1,1 +1,1 @@
-//
+import "./issue-tags";
