@@ -10,6 +10,7 @@ use App\Models\Issue;
 use App\Models\Project;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,9 +20,10 @@ class IssueController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request): View|JsonResponse
     {
         $filters = $request->only([
+            'search',
             'status',
             'priority',
             'tag',
@@ -34,6 +36,16 @@ class IssueController extends Controller
             ->latest()
             ->paginate(10)
             ->withQueryString();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'html' => view(
+                    'issues._results',
+                    compact('issues')
+                )->render(),
+                'total' => $issues->total(),
+            ]);
+        }
 
         return view('issues.index', [
             'issues' => $issues,
