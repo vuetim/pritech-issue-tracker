@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('project_id')->constrained()
-            ->cascadeOnDelete();
+                ->cascadeOnDelete();
             $table->string('title');
             $table->text('description');
             $table->string('status', 20);
-        $table->string('priority', 10);
+            $table->string('priority', 10);
             $table->date('due_date')->nullable();
             $table->timestamps();
             $table->index(['status', 'priority']);

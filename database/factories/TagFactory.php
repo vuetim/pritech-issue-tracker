@@ -15,11 +15,11 @@ class TagFactory extends Factory
      *
      * @return array<string, mixed>
      */
-  public function definition(): array
-{
-    return [
-        'name' => fake()->unique()->word(),
-        'color' => fake()->optional()->hexColor(),
-    ];
-}
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->unique()->word(),
+            'color' => fake()->optional()->hexColor(),
+        ];
+    }
 }

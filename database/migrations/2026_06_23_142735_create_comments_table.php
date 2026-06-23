@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('issue_id')->constrained()
-            ->cascadeOnDelete();
+                ->cascadeOnDelete();
             $table->string('author_name');
-        $table->text('body');
-
+            $table->text('body');
 
             $table->timestamps();
         });
