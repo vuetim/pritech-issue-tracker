@@ -151,18 +151,98 @@
     </p>
 </section>
 
-            <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 class="text-lg font-bold text-slate-900">
-                    Comments
-                    <span class="text-sm font-normal text-slate-500">
-                        ({{ $issue->comments_count }})
-                    </span>
-                </h2>
+          <section
+    id="comments-panel"
+    data-index-url="{{ route('issues.comments.index', $issue) }}"
+    data-store-url="{{ route('issues.comments.store', $issue) }}"
+    class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+>
+    <div>
+        <h2 class="text-lg font-bold text-slate-900">
+            Comments
+            <span
+                id="comments-count"
+                class="text-sm font-normal text-slate-500"
+            >
+                ({{ $issue->comments_count }})
+            </span>
+        </h2>
 
-                <p class="mt-2 text-sm text-slate-600">
-                    Paginated comments and the comment form will be loaded here via AJAX.
-                </p>
-            </section>
+        <p class="mt-1 text-sm text-slate-600">
+            Discussion and updates related to this issue.
+        </p>
+    </div>
+
+    <div
+        id="comment-feedback"
+        role="status"
+        class="mt-4 hidden rounded-lg px-4 py-3 text-sm"
+    ></div>
+
+    <form id="comment-form" class="mt-5 space-y-4">
+        <div>
+            <label for="author_name" class="mb-2 block text-sm font-medium text-slate-700">
+                Your name
+            </label>
+
+            <input
+                id="author_name"
+                name="author_name"
+                type="text"
+                autocomplete="name"
+                class="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            >
+
+            <p
+                id="author-name-error"
+                class="mt-2 hidden text-sm text-red-600"
+            ></p>
+        </div>
+
+        <div>
+            <label for="body" class="mb-2 block text-sm font-medium text-slate-700">
+                Comment
+            </label>
+
+            <textarea
+                id="body"
+                name="body"
+                rows="4"
+                class="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            ></textarea>
+
+            <p
+                id="body-error"
+                class="mt-2 hidden text-sm text-red-600"
+            ></p>
+        </div>
+
+        <div class="flex justify-end">
+            <button
+                type="submit"
+                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+                Add comment
+            </button>
+        </div>
+    </form>
+
+    <div class="my-6 border-t border-slate-200"></div>
+
+    <div id="comments-list" class="space-y-3">
+        <p class="text-sm text-slate-500">Loading comments...</p>
+    </div>
+
+    <div class="mt-5 text-center">
+        <button
+            id="load-more-comments"
+            type="button"
+            class="hidden rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+        >
+            Load more comments
+        </button>
+    </div>
+</section>
         </main>
 
         <aside>
