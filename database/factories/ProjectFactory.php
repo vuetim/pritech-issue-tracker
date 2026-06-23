@@ -15,15 +15,15 @@ class ProjectFactory extends Factory
      *
      * @return array<string, mixed>
      */
-   public function definition(): array
-{
-    $startDate = fake()->dateTimeBetween('-3 months', 'now');
+    public function definition(): array
+    {
+        $startDate = fake()->dateTimeBetween('-3 months', 'now');
 
-    return [
-        'name' => fake()->sentence(3),
-        'description' => fake()->paragraph(),
-        'start_date' => $startDate,
-        'deadline' => fake()->dateTimeBetween($startDate, '+1 year'),
-    ];
-}
+        return [
+            'name' => fake()->sentence(3),
+            'description' => fake()->paragraph(),
+            'start_date' => $startDate,
+            'deadline' => fake()->dateTimeBetween($startDate, '+1 year'),
+        ];
+    }
 }

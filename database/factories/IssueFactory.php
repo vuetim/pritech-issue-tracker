@@ -2,13 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Issue;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Project;
-use App\Enums\IssueStatus;
 use App\Enums\IssuePriority;
-
-
+use App\Enums\IssueStatus;
+use App\Models\Issue;
+use App\Models\Project;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Issue>
@@ -20,15 +18,15 @@ class IssueFactory extends Factory
      *
      * @return array<string, mixed>
      */
-  public function definition(): array
-{
-    return [
-        'project_id' => Project::factory(),
-        'title' => fake()->sentence(5),
-        'description' => fake()->paragraphs(2, true),
-        'status' => fake()->randomElement(IssueStatus::cases()),
-        'priority' => fake()->randomElement(IssuePriority::cases()),
-        'due_date' => fake()->optional()->dateTimeBetween('now', '+6 months'),
-    ];
-}
+    public function definition(): array
+    {
+        return [
+            'project_id' => Project::factory(),
+            'title' => fake()->sentence(5),
+            'description' => fake()->paragraphs(2, true),
+            'status' => fake()->randomElement(IssueStatus::cases()),
+            'priority' => fake()->randomElement(IssuePriority::cases()),
+            'due_date' => fake()->optional()->dateTimeBetween('now', '+6 months'),
+        ];
+    }
 }

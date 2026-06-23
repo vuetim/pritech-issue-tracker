@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Models;
+
 use App\Enums\IssuePriority;
 use App\Enums\IssueStatus;
+use Database\Factories\IssueFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,9 +13,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Issue extends Model
 {
-    /** @use HasFactory<\Database\Factories\IssueFactory> */
+    /** @use HasFactory<IssueFactory> */
     use HasFactory;
-       protected $fillable = [
+
+    protected $fillable = [
         'project_id',
         'title',
         'description',
@@ -21,6 +24,7 @@ class Issue extends Model
         'priority',
         'due_date',
     ];
+
     protected function casts(): array
     {
         return [
@@ -29,7 +33,8 @@ class Issue extends Model
             'due_date' => 'date',
         ];
     }
-      public function project(): BelongsTo
+
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
