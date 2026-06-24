@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -16,6 +17,7 @@ class ProjectController extends Controller
     public function index(): View
     {
         $projects = Project::query()
+            ->with('owner')
             ->withCount('issues')
             ->latest()
             ->paginate(10);
@@ -37,7 +39,9 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request): RedirectResponse
     {
-        $project = Project::create($request->validated());
+        $project = $request->user()
+            ->projects()
+            ->create($request->validated());
 
         return redirect()
             ->route('projects.show', $project)
@@ -49,6 +53,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project): View
     {
+        $project->load('owner');
         $issues = $project->issues()
             ->with('tags')
             ->latest()
@@ -62,6 +67,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project): View
     {
+        Gate::authorize('update', $project);
+
         return view('projects.edit', compact('project'));
     }
 
@@ -70,6 +77,7 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
+        Gate::authorize('update', $project);
         $project->update($request->validated());
 
         return redirect()
@@ -82,6 +90,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project): RedirectResponse
     {
+        Gate::authorize('delete', $project);
         $project->delete();
 
         return redirect()

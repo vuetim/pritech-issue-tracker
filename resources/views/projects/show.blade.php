@@ -21,7 +21,7 @@
             </p>
         </div>
 
-        <div class="flex gap-3">
+        <div class="flex gap-3 items-center">
             <a
                 href="{{ route('projects.edit', $project) }}"
                 class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
@@ -106,7 +106,9 @@
 
                                 <p class="mt-1 text-sm text-slate-600">
                                     {{ str($issue->description)->limit(140) }}
+
                                 </p>
+
                             </div>
 
                             <div class="flex gap-2">
