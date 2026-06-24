@@ -1,58 +1,223 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PRITECH Issue Tracker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel issue-tracking application for small teams to manage projects, issues, tags, comments, and issue assignments.
 
-## About Laravel
+The application was built as a technical task using Laravel conventions, server-rendered Blade views, Eloquent relationships, Form Requests, and lightweight AJAX interactions.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Projects
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- List, create, view, edit, and delete projects
+- Display each project together with its paginated issues
+- Track project start dates and deadlines
+- Associate every project with an owner
+- Allow only the project owner to edit or delete the project
 
-## Learning Laravel
+### Issues
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- List, create, view, edit, and delete issues
+- Filter issues by status, priority, and tag
+- Search issue titles and descriptions with debounced AJAX requests
+- Use PHP-backed enums for issue status and priority
+- Avoid N+1 queries through eager loading
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Tags and comments
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- Create and list uniquely named tags
+- Attach and detach tags from an issue without reloading the page
+- Load paginated comments through AJAX
+- Add comments through AJAX with inline validation feedback
+- Prepend newly added comments and clear the form after submission
 
-## Agentic Development
+### Authentication and assignments
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- Log in and log out using Laravel's session authentication
+- Assign multiple users to an issue through the `issue_user` pivot table
+- Assign and remove issue members through AJAX
+- Seed demo users, projects, issues, tags, assignments, and comments
+
+## Technology
+
+- PHP 8.3+
+- Laravel 13
+- MySQL 8
+- Blade
+- Tailwind CSS 4
+- Vanilla JavaScript and Fetch API
+- Vite
+- PHPUnit
+
+## Requirements
+
+Install the following tools before setting up the application:
+
+- PHP 8.3 or newer with the MySQL PDO extension
+- Composer
+- Node.js and npm
+- MySQL Server
+- Git
+
+Laravel Herd can be used for local development, but it is optional.
+
+## Installation
+
+Clone the repository and enter the project directory:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/vuetim/pritech-issue-tracker.git
+cd pritech-issue-tracker
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Install PHP dependencies:
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Create the local environment file:
 
-## Code of Conduct
+```powershell
+Copy-Item .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+On macOS or Linux, use:
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Generate the application key:
 
-## License
+```bash
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Create a MySQL database:
+
+```sql
+CREATE DATABASE pritech_issue_tracker
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+```
+
+Update the database settings in `.env` for your local MySQL installation:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=pritech_issue_tracker
+DB_USERNAME=root
+DB_PASSWORD=your_mysql_password
+```
+
+If MySQL uses a different port, update `DB_PORT`. The MySQL service must be running before migrations or the application can connect to it.
+
+Run the migrations and seed the demo data:
+
+```bash
+php artisan migrate --seed
+```
+
+Install and build the frontend assets:
+
+```bash
+npm install
+npm run build
+```
+
+Start the application on port 8000:
+
+```bash
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+If port 8000 is unavailable, select another port, for example:
+
+```bash
+php artisan serve --port=8001
+```
+
+When using Laravel Herd from a parked directory, the project is also available at `http://pritech-issue-tracker.test`.
+
+## Demo accounts
+
+All seeded demo accounts use the password `password`.
+
+| Name        | Email                     |
+| ----------- | ------------------------- |
+| Alex Morgan | `alexmorgan@pritech.test` |
+| Jamie Lee   | `jamielee@pritech.test`   |
+| Taylor Kim  | `taylorkim@pritech.test`  |
+
+The seeded projects belong to Alex Morgan. Other authenticated users can collaborate on issues, tags, comments, and assignments, but they cannot edit or delete Alex's projects. A user who creates a new project becomes that project's owner.
+
+## Development
+
+For frontend development with automatic asset rebuilding, run:
+
+```bash
+npm run dev
+```
+
+Run the Laravel server in another terminal:
+
+```bash
+php artisan serve
+```
+
+To recreate the local database and demo data from scratch:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+This command deletes all existing data and must not be used against a production database.
+
+## Verification
+
+Run the automated tests:
+
+```bash
+php artisan test
+```
+
+Check and fix PHP code style:
+
+```bash
+vendor/bin/pint
+```
+
+Create a production frontend build:
+
+```bash
+npm run build
+```
+
+## Data model
+
+- A project belongs to an owner and has many issues.
+- An issue belongs to a project and has many comments.
+- Issues and tags have a many-to-many relationship through `issue_tag`.
+- Issues and users have a many-to-many relationship through `issue_user`.
+- A comment belongs to an issue.
+
+Deleting a project cascades to its issues. Deleting an issue removes its related comments and pivot-table records through database foreign-key constraints.
+
+## Implementation notes
+
+- Resource controllers are used for project and issue CRUD operations.
+- Form Request classes contain validation rules.
+- Eloquent relationships and eager loading are used to keep queries clear and avoid N+1 problems.
+- Issue status and priority are stored as strings and cast to PHP-backed enums.
+- Blade layouts and partials keep the server-rendered UI reusable.
+- AJAX endpoints return JSON while Blade partials render reusable comment markup.
+- `ProjectPolicy` enforces project ownership on both the server and the user interface.
+- CSRF tokens protect all state changing form and AJAX requests.
+
+## Security
+
+The `.env` file is intentionally excluded from Git. Do not commit database passwords, application keys, or other local credentials.
