@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateIssueRequest;
 use App\Models\Issue;
 use App\Models\Project;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -83,7 +84,7 @@ class IssueController extends Controller
      */
     public function show(Issue $issue): View
     {
-        $issue->load(['project', 'tags']);
+        $issue->load(['project', 'tags', 'members']);
         $issue->loadCount('comments');
 
         $availableTags = Tag::query()
@@ -94,7 +95,18 @@ class IssueController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('issues.show', compact('issue', 'availableTags'));
+        $availableMembers = User::query()
+            ->whereDoesntHave(
+                'assignedIssues',
+                fn ($query) => $query->whereKey($issue->id)
+            )
+            ->orderBy('name')
+            ->get(['id', 'name', 'email']);
+
+        return view(
+            'issues.show',
+            compact('issue', 'availableTags', 'availableMembers')
+        );
     }
 
     /**

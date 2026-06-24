@@ -81,4 +81,9 @@ class Issue extends Model
                 )
             );
     }
+
+    public function members(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

@@ -73,15 +73,16 @@
                                 </td>
 
                                 <td class="px-6 py-4">
-                                    <div class="flex justify-end gap-3">
+                                    <div class="flex justify-end gap-3 items-center">
+                                        @can('update', $project)
                                         <a
                                             href="{{ route('projects.edit', $project) }}"
                                             class="text-sm font-medium text-slate-600 hover:text-slate-900"
                                         >
                                             Edit
                                         </a>
-
-                                        <form
+@endcan
+@can('delete', $project)                                       <form
                                             method="POST"
                                             action="{{ route('projects.destroy', $project) }}"
                                             onsubmit="return confirm('Delete this project and all of its issues?')"
@@ -96,6 +97,7 @@
                                                 Delete
                                             </button>
                                         </form>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

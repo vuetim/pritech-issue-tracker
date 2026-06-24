@@ -32,7 +32,7 @@
                         </h1>
                     </div>
 
-                    <div class="flex gap-3">
+                    <div class="flex gap-3 items-center">
                         <a
                             href="{{ route('issues.edit', $issue) }}"
                             class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
@@ -150,7 +150,89 @@
         No tags attached.
     </p>
 </section>
+<section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div>
+        <h2 class="text-lg font-bold text-slate-900">Assigned members</h2>
 
+        <p class="mt-1 text-sm text-slate-600">
+            Assign or remove team members without reloading the page.
+        </p>
+    </div>
+
+    <div
+        id="member-feedback"
+        role="status"
+        class="mt-4 hidden rounded-lg px-4 py-3 text-sm"
+    ></div>
+
+    <form
+        id="assign-member-form"
+        data-url="{{ route('issues.members.store', $issue) }}"
+        data-detach-template="{{ route('issues.members.destroy', [$issue, '__USER__']) }}"
+        class="mt-5 flex flex-col gap-3 sm:flex-row"
+    >
+        <select
+            id="member-select"
+            name="user_id"
+            class="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2"
+        >
+            <option value="">Select a member</option>
+
+            @foreach ($availableMembers as $member)
+                <option value="{{ $member->id }}">
+                    {{ $member->name }} — {{ $member->email }}
+                </option>
+            @endforeach
+        </select>
+
+        <button
+            type="submit"
+            class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+        >
+            Assign member
+        </button>
+    </form>
+
+    <p id="member-error" class="mt-2 hidden text-sm text-red-600"></p>
+
+    <div id="issue-members" class="mt-5 space-y-2">
+        @foreach ($issue->members as $member)
+            <div
+                data-member-item
+                data-member-id="{{ $member->id }}"
+                data-member-name="{{ $member->name }}"
+data-member-email="{{ $member->email }}"
+                class="flex items-center justify-between rounded-lg bg-slate-50 px-4 py-3"
+            >
+                <div>
+                    <div class="font-medium text-slate-900">
+                        {{ $member->name }}
+                    </div>
+
+                    <div class="text-sm text-slate-500">
+                        {{ $member->email }}
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    data-detach-member
+                    data-url="{{ route('issues.members.destroy', [$issue, $member]) }}"
+                    class="text-sm font-semibold text-red-600 hover:text-red-800"
+                >
+                    Remove
+                </button>
+            </div>
+        @endforeach
+    </div>
+
+    <p
+        id="empty-members-message"
+        class="mt-4 text-sm text-slate-500 {{ $issue->members->isNotEmpty() ? 'hidden' : '' }}"
+    >
+        No members assigned.
+    </p>
+</section>
           <section
     id="comments-panel"
     data-index-url="{{ route('issues.comments.index', $issue) }}"

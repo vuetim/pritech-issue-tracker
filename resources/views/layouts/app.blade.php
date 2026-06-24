@@ -14,38 +14,51 @@
         <header class="border-b border-slate-200 bg-white">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
                 <a
-                    href="{{ route('projects.index') }}"
+    href="{{ auth()->check() ? route('projects.index') : route('login') }}"
                     class="text-xl font-bold text-slate-900"
                 >
                     PRITECH Issue Tracker
                 </a>
 
-                <nav class="flex items-center gap-4">
-                    <a
-                        href="{{ route('projects.index') }}"
-                        class="text-sm font-medium text-slate-600 hover:text-slate-900"
-                    >
-                        Projects
-                    </a>
-<a
-    href="{{ route('issues.index') }}"
-    class="text-sm font-medium text-slate-600 hover:text-slate-900"
->
-    Issues
-</a>
-<a
-    href="{{ route('tags.index') }}"
-    class="text-sm font-medium text-slate-600 hover:text-slate-900"
->
-    Tags
-</a>
-                    <a
-                        href="{{ route('projects.create') }}"
-                        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                    >
-                        New project
-                    </a>
-                </nav>
+              @auth
+    <nav class="flex items-center gap-4">
+        <a
+            href="{{ route('projects.index') }}"
+            class="text-sm font-medium text-slate-600 hover:text-slate-900"
+        >
+            Projects
+        </a>
+
+        <a
+            href="{{ route('issues.index') }}"
+            class="text-sm font-medium text-slate-600 hover:text-slate-900"
+        >
+            Issues
+        </a>
+
+        <a
+            href="{{ route('tags.index') }}"
+            class="text-sm font-medium text-slate-600 hover:text-slate-900"
+        >
+            Tags
+        </a>
+
+        <span class="hidden text-sm text-slate-500 md:inline">
+            {{ auth()->user()->name }}
+        </span>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+
+            <button
+                type="submit"
+                class="text-sm font-medium text-red-600 hover:text-red-800"
+            >
+                Log out
+            </button>
+        </form>
+    </nav>
+@endauth
             </div>
         </header>
 
